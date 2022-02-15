@@ -75,10 +75,10 @@ public final class Constants {
     public static final SimpleMotorFeedforward kFeedforward = new SimpleMotorFeedforward(1, 0.8, 0.15);
 
     // Example value only - as above, this must be tuned for your drive!
-    public static final double kPFrontLeftVel = 0.5;
-    public static final double kPRearLeftVel = 0.5;
-    public static final double kPFrontRightVel = 0.5;
-    public static final double kPRearRightVel = 0.5;
+    public static final double kPFrontLeftVel = 0.75;
+    public static final double kPRearLeftVel = 0.75;
+    public static final double kPFrontRightVel = 0.75;
+    public static final double kPRearRightVel = 0.75;
 
     // Drivetrain
     public static final double GearRatio = 48/1;
