@@ -29,11 +29,11 @@ import edu.wpi.first.networktables.*;
 public class DriveSubsystem extends SubsystemBase {
 
     WPI_TalonSRX m_frontLeft = new WPI_TalonSRX(DriveConstants.ID_frontLeftMotor);
-    WPI_TalonSRX m_rearLeft = new WPI_TalonSRX(DriveConstants.ID_backLeftMotor);
+    WPI_TalonSRX m_backLeft = new WPI_TalonSRX(DriveConstants.ID_backLeftMotor);
     WPI_TalonSRX m_frontRight = new WPI_TalonSRX(DriveConstants.ID_frontRightMotor);
-    WPI_TalonSRX m_rearRight = new WPI_TalonSRX(DriveConstants.ID_backRightMotor);
+    WPI_TalonSRX m_backRight = new WPI_TalonSRX(DriveConstants.ID_backRightMotor);
 
-    private final MecanumDrive m_drive = new MecanumDrive(m_frontLeft, m_rearLeft, m_frontRight, m_rearRight);
+    private final MecanumDrive m_drive = new MecanumDrive(m_frontLeft, m_backLeft, m_frontRight, m_backRight);
 
     // The gyro sensor
     private final Gyro m_gyro = new ADXRS450_Gyro();
@@ -55,9 +55,9 @@ public class DriveSubsystem extends SubsystemBase {
         // m_rearLeft.setInverted(false);
 
         m_frontRight.setInverted(false);
-        m_rearRight.setInverted(false);
+        m_backRight.setInverted(false);
         m_frontLeft.setInverted(true);
-        m_rearLeft.setInverted(true);
+        m_backLeft.setInverted(true);
 
 
     }
@@ -69,9 +69,9 @@ public class DriveSubsystem extends SubsystemBase {
                 m_gyro.getRotation2d(),
                 new MecanumDriveWheelSpeeds(
                     getSpeed(m_frontLeft) ,
-                    getSpeed(m_rearLeft) ,
+                    getSpeed(m_backLeft) ,
                     getSpeed(m_frontRight) ,
-                    getSpeed(m_rearRight) 
+                    getSpeed(m_backRight) 
                     )
          ) ;
          report() ;
@@ -126,9 +126,9 @@ public class DriveSubsystem extends SubsystemBase {
     /** Sets the front left drive MotorController to a voltage. */
     public void setDriveMotorControllersVolts(MecanumDriveMotorVoltages volts) {
         m_frontLeft.setVoltage(volts.frontLeftVoltage);
-        m_rearLeft.setVoltage(volts.rearLeftVoltage);
+        m_backLeft.setVoltage(volts.rearLeftVoltage);
         m_frontRight.setVoltage(volts.frontRightVoltage);
-        m_rearRight.setVoltage(volts.rearRightVoltage);
+        m_backRight.setVoltage(volts.rearRightVoltage);
         NetworkTableInstance.getDefault().getEntry("drive/front_left_volts").setDouble(volts.frontLeftVoltage);
         NetworkTableInstance.getDefault().getEntry("drive/front_right_volts").setDouble(volts.frontRightVoltage);
         NetworkTableInstance.getDefault().getEntry("drive/rear_left_volts").setDouble(volts.rearLeftVoltage);
@@ -138,9 +138,9 @@ public class DriveSubsystem extends SubsystemBase {
     /** Resets the drive encoders to currently read a position of 0. */
     public void resetEncoders() {
         m_frontLeft.setSelectedSensorPosition(0);
-        m_rearLeft.setSelectedSensorPosition(0);
+        m_backLeft.setSelectedSensorPosition(0);
         m_frontRight.setSelectedSensorPosition(0);
-        m_rearRight.setSelectedSensorPosition(0);
+        m_backRight.setSelectedSensorPosition(0);
     }
 
 
@@ -152,9 +152,9 @@ public class DriveSubsystem extends SubsystemBase {
     public MecanumDriveWheelSpeeds getCurrentWheelSpeeds() {
         return new MecanumDriveWheelSpeeds(
             getSpeed(m_frontLeft) ,
-            getSpeed(m_rearLeft) ,
+            getSpeed(m_backLeft) ,
             getSpeed(m_frontRight) ,
-            getSpeed(m_rearRight) ) ;
+            getSpeed(m_backRight) ) ;
 
                 // m_frontLeftEncoder.getRate(),
                 // m_rearLeftEncoder.getRate(),
@@ -198,11 +198,11 @@ public class DriveSubsystem extends SubsystemBase {
 
     private void report() {
         // Report various parameters out to network tables for monitoring purposes
-        NetworkTableInstance.getDefault().getEntry("drive/back_left_position").setDouble(m_rearLeft.getSelectedSensorPosition());
-        NetworkTableInstance.getDefault().getEntry("drive/back_left_velocity").setDouble(m_rearLeft.getSelectedSensorVelocity());
+        NetworkTableInstance.getDefault().getEntry("drive/back_left_position").setDouble(m_backLeft.getSelectedSensorPosition());
+        NetworkTableInstance.getDefault().getEntry("drive/back_left_velocity").setDouble(m_backLeft.getSelectedSensorVelocity());
 
-        NetworkTableInstance.getDefault().getEntry("drive/back_right_position").setDouble(m_rearRight.getSelectedSensorPosition());
-        NetworkTableInstance.getDefault().getEntry("drive/back_right_velocity").setDouble(m_rearRight.getSelectedSensorVelocity());
+        NetworkTableInstance.getDefault().getEntry("drive/back_right_position").setDouble(m_backRight.getSelectedSensorPosition());
+        NetworkTableInstance.getDefault().getEntry("drive/back_right_velocity").setDouble(m_backRight.getSelectedSensorVelocity());
 
         NetworkTableInstance.getDefault().getEntry("drive/front_left_position").setDouble(m_frontLeft.getSelectedSensorPosition());
         NetworkTableInstance.getDefault().getEntry("drive/front_left_velocity").setDouble(m_frontLeft.getSelectedSensorVelocity());
