@@ -49,15 +49,17 @@ public class DriveSubsystem extends SubsystemBase {
         // result in both sides moving forward. Depending on how your robot's
         // gearbox is constructed, you might have to invert the left side instead.
 
-        // m_frontRight.setInverted(true);
-        // m_rearRight.setInverted(true);
-        // m_frontLeft.setInverted(false);
-        // m_rearLeft.setInverted(false);
-
         m_frontRight.setInverted(true);
         m_backRight.setInverted(false);
         m_frontLeft.setInverted(true);
         m_backLeft.setInverted(false);
+        
+        // Inverting encoders so that all are positive in graphing app
+
+        m_frontLeft.setSensorPhase(true);
+        m_backRight.setSensorPhase(true);
+        m_frontLeft.setSensorPhase(false);
+        m_backLeft.setSensorPhase(false);
 
 
     }
