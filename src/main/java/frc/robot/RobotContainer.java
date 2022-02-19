@@ -38,9 +38,12 @@ public class RobotContainer {
   Joystick m_driverController = new Joystick(1); // change
 
   // The driver's controller
-  //XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
+  // XboxController m_driverController = new
+  // XboxController(OIConstants.kDriverControllerPort);
 
-  /** The container for the robot. Contains subsystems, OI devices, and commands. */
+  /**
+   * The container for the robot. Contains subsystems, OI devices, and commands.
+   */
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
@@ -51,16 +54,20 @@ public class RobotContainer {
         // A split-stick arcade command, with forward/backward controlled by the left
         // hand, and turning controlled by the right.
         new RunCommand(() -> {
-            m_robotDrive.drive(m_driverController.getRawAxis(5) * 0.5,
-                    m_driverController.getRawAxis(4),
-                    -m_driverController.getRawAxis(0) * 0.5, false);
+          m_robotDrive.drive(
+              m_driverController.getRawAxis(5) * 0.5,
+              m_driverController.getRawAxis(4),
+              -m_driverController.getRawAxis(0) * 0.5, false);
         }, m_robotDrive));
-}
+  }
 
   /**
-   * Use this method to define your button->command mappings. Buttons can be created by
-   * instantiating a {@link edu.wpi.first.wpilibj.GenericHID} or one of its subclasses ({@link
-   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then calling passing it to a
+   * Use this method to define your button->command mappings. Buttons can be
+   * created by
+   * instantiating a {@link edu.wpi.first.wpilibj.GenericHID} or one of its
+   * subclasses ({@link
+   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then calling
+   * passing it to a
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() {
@@ -77,52 +84,47 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // Create config for trajectory
-    TrajectoryConfig config =
-        new TrajectoryConfig(
-                AutoConstants.kMaxSpeedMetersPerSecond,
-                AutoConstants.kMaxAccelerationMetersPerSecondSquared)
+    TrajectoryConfig config = new TrajectoryConfig(
+        AutoConstants.kMaxSpeedMetersPerSecond,
+        AutoConstants.kMaxAccelerationMetersPerSecondSquared)
             // Add kinematics to ensure max speed is actually obeyed
             .setKinematics(DriveConstants.kDriveKinematics);
 
-    // An example trajectory to follow.  All units in meters.
-    Trajectory exampleTrajectory =
-        TrajectoryGenerator.generateTrajectory(
-            // Start at the origin facing the +X direction
-            new Pose2d(0, 0, new Rotation2d(0)),
-//            List.of(new Translation2d(1, 1), new Translation2d(-2,1)),
-            List.of(
-               ),
-                new Pose2d(0, 2, new Rotation2d(0)),
-            config
-            );
+    // An example trajectory to follow. All units in meters.
+    Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
+        // Start at the origin facing the +X direction
+        new Pose2d(0, 0, new Rotation2d(0)),
+        // List.of(new Translation2d(1, 1), new Translation2d(-2,1)),
+        List.of(),
+        new Pose2d(0, 2, new Rotation2d(0)),
+        config);
 
-    MecanumControllerCommand mecanumControllerCommand =
-        new MecanumControllerCommand(
-            exampleTrajectory,
-            m_robotDrive::getPose,
-            DriveConstants.kFeedforward,
-            DriveConstants.kDriveKinematics,
+    MecanumControllerCommand mecanumControllerCommand = new MecanumControllerCommand(
+        exampleTrajectory,
+        m_robotDrive::getPose,
+        DriveConstants.kFeedforward,
+        DriveConstants.kDriveKinematics,
 
-            // Position contollers
-            new PIDController(AutoConstants.kPXController, 0, 0),
-            new PIDController(AutoConstants.kPYController, 0, 0),
-            new ProfiledPIDController(
-                AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints),
+        // Position contollers
+        new PIDController(AutoConstants.kPXController, 0, 0),
+        new PIDController(AutoConstants.kPYController, 0, 0),
+        new ProfiledPIDController(
+            AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints),
 
-            // Needed for normalizing wheel speeds
-            AutoConstants.kMaxSpeedMetersPerSecond,
+        // Needed for normalizing wheel speeds
+        AutoConstants.kMaxSpeedMetersPerSecond,
 
-            // Velocity PID's
-            new PIDController(DriveConstants.kPFrontLeftVel, 0, 0),
-            new PIDController(DriveConstants.kPRearLeftVel, 0, 0),
-            new PIDController(DriveConstants.kPFrontRightVel, 0, 0),
-            new PIDController(DriveConstants.kPRearRightVel, 0, 0),
-            m_robotDrive::getCurrentWheelSpeeds,
-            m_robotDrive::setDriveMotorControllersVolts, // Consumer for the output motor voltages
-            m_robotDrive);
+        // Velocity PID's
+        new PIDController(DriveConstants.kPFrontLeftVel, 0, 0),
+        new PIDController(DriveConstants.kPRearLeftVel, 0, 0),
+        new PIDController(DriveConstants.kPFrontRightVel, 0, 0),
+        new PIDController(DriveConstants.kPRearRightVel, 0, 0),
+        m_robotDrive::getCurrentWheelSpeeds,
+        m_robotDrive::setDriveMotorControllersVolts, // Consumer for the output motor voltages
+        m_robotDrive);
 
     // Reset odometry to the starting pose of the trajectory.
-    Pose2d temp = exampleTrajectory.getInitialPose() ;
+    Pose2d temp = exampleTrajectory.getInitialPose();
     m_robotDrive.resetOdometry(exampleTrajectory.getInitialPose());
 
     // Run path following command, then stop at the end.
