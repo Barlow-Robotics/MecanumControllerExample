@@ -54,8 +54,8 @@ public class DriveSubsystem extends SubsystemBase {
         // m_frontLeft.setInverted(false);
         // m_rearLeft.setInverted(false);
 
-        m_frontRight.setInverted(false);
-        m_backRight.setInverted(false);
+        m_frontRight.setInverted(true);
+        m_backRight.setInverted(true);
         m_frontLeft.setInverted(true);
         m_backLeft.setInverted(true);
 
