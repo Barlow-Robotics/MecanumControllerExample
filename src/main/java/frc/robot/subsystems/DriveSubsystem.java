@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.MecanumDriveMotorVoltages;
 import edu.wpi.first.math.kinematics.MecanumDriveOdometry;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelSpeeds;
@@ -49,18 +50,18 @@ public class DriveSubsystem extends SubsystemBase {
         // result in both sides moving forward. Depending on how your robot's
         // gearbox is constructed, you might have to invert the left side instead.
 
-        m_frontRight.setInverted(true);
-        m_backRight.setInverted(false);
-        m_frontLeft.setInverted(true);
-        m_backLeft.setInverted(false);
-        
         // Inverting encoders so that all are positive in graphing app
 
         m_frontLeft.setSensorPhase(true);
         m_backRight.setSensorPhase(true);
-        m_frontLeft.setSensorPhase(false);
+        m_frontRight.setSensorPhase(false);
         m_backLeft.setSensorPhase(false);
 
+        m_frontLeft.setInverted(true);
+        m_backRight.setInverted(false);
+        m_frontRight.setInverted(true);
+        m_backLeft.setInverted(false);
+        
 
     }
 
@@ -68,6 +69,7 @@ public class DriveSubsystem extends SubsystemBase {
     public void periodic() {
         // Update the odometry in the periodic block
         m_odometry.update(
+
                 m_gyro.getRotation2d(),
                 new MecanumDriveWheelSpeeds(
                     getSpeed(m_frontLeft) ,
@@ -184,8 +186,14 @@ public class DriveSubsystem extends SubsystemBase {
      *
      * @return the robot's heading in degrees, from -180 to 180
      */
-    public double getHeading() {
-        return m_gyro.getRotation2d().getDegrees();
+    public double getGyroHeading() {
+        return -Math.IEEEremainder(m_gyro.getAngle(), 360) ;
+        //return m_gyro.getRotation2d().getDegrees();
+    }
+
+
+    public Rotation2d getHeading() {
+        return Rotation2d.fromDegrees(getGyroHeading()) ;
     }
 
     /**
@@ -193,9 +201,9 @@ public class DriveSubsystem extends SubsystemBase {
      *
      * @return The turn rate of the robot, in degrees per second
      */
-    public double getTurnRate() {
-        return -m_gyro.getRate();
-    }
+    // public double getTurnRate() {
+    //     return -m_gyro.getRate();
+    // }
 
 
     private void report() {
@@ -211,7 +219,7 @@ public class DriveSubsystem extends SubsystemBase {
 
         NetworkTableInstance.getDefault().getEntry("drive/front_right_position").setDouble(m_frontRight.getSelectedSensorPosition());
         NetworkTableInstance.getDefault().getEntry("drive/front_right_velocity").setDouble(m_frontRight.getSelectedSensorVelocity());
+    
+        NetworkTableInstance.getDefault().getEntry("drive/gyro_heading").setDouble(getGyroHeading());
     }
-
-
 }
