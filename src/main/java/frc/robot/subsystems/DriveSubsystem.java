@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
@@ -52,6 +53,11 @@ public class DriveSubsystem extends SubsystemBase {
 
         // Inverting encoders so that all are positive in graphing app
 
+        setMotorConfig(m_frontLeft);
+        setMotorConfig(m_frontRight);
+        setMotorConfig(m_backLeft);
+        setMotorConfig(m_backRight);
+
         m_frontLeft.setSensorPhase(true);
         m_backRight.setSensorPhase(true);
         m_frontRight.setSensorPhase(false);
@@ -61,7 +67,6 @@ public class DriveSubsystem extends SubsystemBase {
         m_backRight.setInverted(false);
         m_frontRight.setInverted(true);
         m_backLeft.setInverted(false);
-        
 
     }
 
@@ -166,6 +171,17 @@ public class DriveSubsystem extends SubsystemBase {
                 // m_rearRightEncoder.getRate());
     }
 
+
+    public void setWheelSpeeds(MecanumDriveWheelSpeeds speeds) {
+        m_frontLeft.set(TalonSRXControlMode.Velocity, speeds.frontLeftMetersPerSecond);
+        m_frontRight.set(TalonSRXControlMode.Velocity, speeds.frontRightMetersPerSecond);
+        m_backLeft.set(TalonSRXControlMode.Velocity, speeds.rearLeftMetersPerSecond);
+        m_backRight.set(TalonSRXControlMode.Velocity, speeds.rearRightMetersPerSecond);
+    }
+
+
+
+
     /**
      * Sets the max output of the drive. Useful for scaling the drive to drive more
      * slowly.
@@ -206,19 +222,41 @@ public class DriveSubsystem extends SubsystemBase {
     // }
 
 
+    private void setMotorConfig(WPI_TalonSRX motor) { // changed to TalonFX for intake
+        motor.configFactoryDefault();
+        motor.configClosedloopRamp(Constants.DriveConstants.closedVoltageRampingConstant);
+        motor.configOpenloopRamp(Constants.DriveConstants.manualVoltageRampingConstant);
+        motor.config_kF(Constants.DriveConstants.PID_id, Constants.DriveConstants.DrivetrainKf);
+        motor.config_kP(Constants.DriveConstants.PID_id, Constants.DriveConstants.DrivetrainkP);
+        motor.config_kI(Constants.DriveConstants.PID_id, 0);
+        motor.config_kD(Constants.DriveConstants.PID_id, 0);
+        motor.setNeutralMode(NeutralMode.Brake);
+    }
+
+
+
+
     private void report() {
         // Report various parameters out to network tables for monitoring purposes
         NetworkTableInstance.getDefault().getEntry("drive/back_left_position").setDouble(m_backLeft.getSelectedSensorPosition());
         NetworkTableInstance.getDefault().getEntry("drive/back_left_velocity").setDouble(m_backLeft.getSelectedSensorVelocity());
+        NetworkTableInstance.getDefault().getEntry("drive/back_left_target_velocity").setDouble(m_backLeft.getClosedLoopTarget());
+        NetworkTableInstance.getDefault().getEntry("drive/back_left_velocity_error").setDouble(m_backLeft.getClosedLoopError());
 
         NetworkTableInstance.getDefault().getEntry("drive/back_right_position").setDouble(m_backRight.getSelectedSensorPosition());
         NetworkTableInstance.getDefault().getEntry("drive/back_right_velocity").setDouble(m_backRight.getSelectedSensorVelocity());
+        NetworkTableInstance.getDefault().getEntry("drive/back_right_target_velocity").setDouble(m_backLeft.getClosedLoopTarget());
+        NetworkTableInstance.getDefault().getEntry("drive/back_right_velocity_error").setDouble(m_backLeft.getClosedLoopError());
 
         NetworkTableInstance.getDefault().getEntry("drive/front_left_position").setDouble(m_frontLeft.getSelectedSensorPosition());
         NetworkTableInstance.getDefault().getEntry("drive/front_left_velocity").setDouble(m_frontLeft.getSelectedSensorVelocity());
+        NetworkTableInstance.getDefault().getEntry("drive/front_left_target_velocity").setDouble(m_backLeft.getClosedLoopTarget());
+        NetworkTableInstance.getDefault().getEntry("drive/front_left_velocity_error").setDouble(m_backLeft.getClosedLoopError());
 
         NetworkTableInstance.getDefault().getEntry("drive/front_right_position").setDouble(m_frontRight.getSelectedSensorPosition());
         NetworkTableInstance.getDefault().getEntry("drive/front_right_velocity").setDouble(m_frontRight.getSelectedSensorVelocity());
+        NetworkTableInstance.getDefault().getEntry("drive/front_right_target_velocity").setDouble(m_backLeft.getClosedLoopTarget());
+        NetworkTableInstance.getDefault().getEntry("drive/front_right_velocity_error").setDouble(m_backLeft.getClosedLoopError());
     
         NetworkTableInstance.getDefault().getEntry("drive/gyro_heading").setDouble(getGyroHeading());
     }

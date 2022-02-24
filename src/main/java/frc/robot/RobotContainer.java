@@ -9,6 +9,7 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.MecanumDriveWheelSpeeds;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
@@ -22,14 +23,16 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.DriveSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.MecanumControllerCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
-import java.io.IOException;
-import java.nio.file.Path;
-import java.util.List;
-import frc.robot.Robot;
+import com.pathplanner.lib.*;
+import com.pathplanner.lib.commands.PPMecanumControllerCommand;
+
+// import java.io.IOException;
+// import java.nio.file.Path;
+// import java.util.List;
+// import frc.robot.Robot;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -87,6 +90,9 @@ public class RobotContainer {
                 .whenReleased(() -> m_robotDrive.setMaxOutput(1));
     }
 
+
+
+
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.
      * 
@@ -96,88 +102,46 @@ public class RobotContainer {
      */
     public Command getAutonomousCommand() {
 
-        for (int i = 0; i < 2; i++) {
-            selectedTrajectory[i] = trajectories.getTrajectoryFromCSV("")[i];
-        }
+        PathPlannerTrajectory trajectory = PathPlanner.loadPath("Test_Path_Forwards", 3, 3);
 
-        // Create config for trajectory
-        TrajectoryConfig config = new TrajectoryConfig(
-                AutoConstants.kMaxSpeedMetersPerSecond,
-                AutoConstants.kMaxAccelerationMetersPerSecondSquared)
-                        // Add kinematics to ensure max speed is actually obeyed
-                        .setKinematics(DriveConstants.kDriveKinematics);
-
-        // try {
-        // Path trajectoryPath =
-        // Filesystem.getDeployDirectory().toPath().resolve(Robot.selectedPath);
-        // Robot.trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
-        // } catch (IOException ex) {
-        // DriverStation.reportError("Unable to open trajectory: " + Robot.selectedPath
-        // , ex.getStackTrace());
-        // }
-
-        // An example trajectory to follow. All units in meters.
-        // if (Robot.trajectory == null) {
-        Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
-                // Start at the origin facing the +X direction
-                new Pose2d(0, 0, new Rotation2d(0)),
-                // List.of(new Translation2d(1, 1), new Translation2d(-2,1)),
-                List.of(
-                        new Translation2d(0, 1)),
-                new Pose2d(0, 2, new Rotation2d(Math.PI / 2.0)),
-                config);
-        // }
-
-        MecanumControllerCommand command = new MecanumControllerCommand(
-                selectedTrajectory[0],
-                selectedTrajectory[1],
+        PPMecanumControllerCommand ppCommand = new PPMecanumControllerCommand(
+                trajectory,
                 m_robotDrive::getPose,
-                DriveConstants.kFeedforward,
                 DriveConstants.kDriveKinematics,
                 new PIDController(AutoConstants.kPXController, 0, 0),
                 new PIDController(AutoConstants.kPYController, 0, 0),
-                new ProfiledPIDController(
-                        AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints),
+                new ProfiledPIDController( AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints),
                 AutoConstants.kMaxSpeedMetersPerSecond,
-                new PIDController(DriveConstants.kPFrontLeftVel, 0, 0),
-                new PIDController(DriveConstants.kPRearLeftVel, 0, 0),
-                new PIDController(DriveConstants.kPFrontRightVel, 0, 0),
-                new PIDController(DriveConstants.kPRearRightVel, 0, 0),
-                m_robotDrive::getCurrentWheelSpeeds,
-                m_robotDrive::setDriveMotorControllersVolts);
+                m_robotDrive::setWheelSpeeds,
+                m_robotDrive
+                );
 
-        // MecanumControllerCommand mecanumControllerCommand = new
-        // MecanumControllerCommand(
-        // trajectory,
-        // m_robotDrive::getPose,
-        // DriveConstants.kFeedforward,
-        // DriveConstants.kDriveKinematics,
 
-        // // Position contollers
-        // new PIDController(AutoConstants.kPXController, 0, 0),
-        // new PIDController(AutoConstants.kPYController, 0, 0),
-        // new ProfiledPIDController(
-        // AutoConstants.kPThetaController, 0, 0,
-        // AutoConstants.kThetaControllerConstraints),
+        // // Create config for trajectory
+        // TrajectoryConfig config = new TrajectoryConfig(
+        //         AutoConstants.kMaxSpeedMetersPerSecond,
+        //         AutoConstants.kMaxAccelerationMetersPerSecondSquared)
+        //                 // Add kinematics to ensure max speed is actually obeyed
+        //                 .setKinematics(DriveConstants.kDriveKinematics);
 
-        // // Needed for normalizing wheel speeds
-        // AutoConstants.kMaxSpeedMetersPerSecond,
+        // // An example trajectory to follow. All units in meters.
+        // // if (Robot.trajectory == null) {
+        // Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
+        //         // Start at the origin facing the +X direction
+        //         new Pose2d(0, 0, new Rotation2d(0)),
+        //         // List.of(new Translation2d(1, 1), new Translation2d(-2,1)),
+        //         List.of(
+        //                 new Translation2d(0, 1)),
+        //         new Pose2d(0, 2, new Rotation2d(Math.PI / 2.0)),
+        //         config);
+        // // }
 
-        // // Velocity PID's
-        // new PIDController(DriveConstants.kPFrontLeftVel, 0, 0),
-        // new PIDController(DriveConstants.kPRearLeftVel, 0, 0),
-        // new PIDController(DriveConstants.kPFrontRightVel, 0, 0),
-        // new PIDController(DriveConstants.kPRearRightVel, 0, 0),
-        // m_robotDrive::getCurrentWheelSpeeds,
-        // m_robotDrive::setDriveMotorControllersVolts, // Consumer for the output motor
-        // voltages
-        // m_robotDrive);
 
         // Reset odometry to the starting pose of the trajectory.
         Pose2d temp = trajectory.getInitialPose();
         m_robotDrive.resetOdometry(trajectory.getInitialPose());
 
         // Run path following command, then stop at the end.
-        return command.andThen(() -> m_robotDrive.drive(0, 0, 0, false));
+        return ppCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false));
     }
 }
