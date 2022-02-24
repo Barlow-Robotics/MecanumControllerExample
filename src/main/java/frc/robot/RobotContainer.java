@@ -63,15 +63,26 @@ public class RobotContainer {
 
         // Configure default commands
         // Set the default drive command to split-stick arcade drive
-        m_robotDrive.setDefaultCommand(
-                // A split-stick arcade command, with forward/backward controlled by the left
-                // hand, and turning controlled by the right.
-                new RunCommand(() -> {
-                    m_robotDrive.drive(
-                            m_driverController.getRawAxis(5),
-                            m_driverController.getRawAxis(4),
-                            -m_driverController.getRawAxis(0) * 0.5, false);
-                }, m_robotDrive));
+        // m_robotDrive.setDefaultCommand(
+        //         // A split-stick arcade command, with forward/backward controlled by the left
+        //         // hand, and turning controlled by the right.
+        //         new RunCommand(() -> {
+        //             m_robotDrive.drive(
+        //                     m_driverController.getRawAxis(5),
+        //                     m_driverController.getRawAxis(4),
+        //                     -m_driverController.getRawAxis(0) * 0.5, false);
+        //         }, m_robotDrive));
+
+
+                m_robotDrive.setDefaultCommand(
+                    // A split-stick arcade command, with forward/backward controlled by the left
+                    // hand, and turning controlled by the right.
+                    new RunCommand(() -> {
+                        m_robotDrive.drive(
+                                -0.0, 
+                                0.0,
+                                -m_driverController.getRawAxis(0) * 0.5, false);
+                    }, m_robotDrive));
     }
 
     /**
@@ -102,7 +113,9 @@ public class RobotContainer {
      */
     public Command getAutonomousCommand() {
 
-        PathPlannerTrajectory trajectory = PathPlanner.loadPath("Test_Path_Forwards", 3, 3);
+        PathPlannerTrajectory trajectory = PathPlanner.loadPath("Test Path North South", 1, 0.5);
+
+        m_robotDrive.resetOdometry(trajectory.getInitialPose());  
 
         PPMecanumControllerCommand ppCommand = new PPMecanumControllerCommand(
                 trajectory,

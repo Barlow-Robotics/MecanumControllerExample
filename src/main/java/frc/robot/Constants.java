@@ -37,11 +37,13 @@ public final class Constants {
     public static final double circumferenceOfWheel = 6.0 * Math.PI;
 
     // wpk need to measure and update.
-    public static final int Counts_Per_Revolution = 21300 ;
+    public static final int Counts_Per_Revolution = 8192 ;
     public static final double Wheel_Diameter = 6.0 ;
     public static final double Inches_Per_Revolution = Math.PI * Wheel_Diameter ;
     public static final double Meters_Per_Revolution = Inches_Per_Revolution * InchesToMeters ;
-    public static final double Meters_Per_Count = Meters_Per_Revolution / Counts_Per_Revolution ; 
+    public static final double Meters_Per_Count = Meters_Per_Revolution / Counts_Per_Revolution ;
+    public static final double Counts_Per_Meter = 1.0 / Meters_Per_Count ; 
+ 
 
     // wpk need to measure and update.
     // Distance between centers of right and left wheels on robot
@@ -90,8 +92,11 @@ public final class Constants {
 
     public static final int PID_id = 0;
     public static final double PID_Period = 1.0 / 20.0;
-    public static final double DrivetrainKf = 1.8; // 0.1797
-    public static final double DrivetrainkP = 0.02;
+    public static final double DrivetrainKf = 0.189; // 0.1797
+    public static final double DrivetrainkP = DrivetrainKf / 10.0 ;
+    public static final double DrivetrainkD = DrivetrainkP / 8.0 ;
+    public static final double DrivetrainkI = 0.0 ;
+
 
     public static final double UnitsPerRotation = 1024;
     public static final double RPMsToUnitsPerHundredMilliseconds = 1.0 / 600.0;

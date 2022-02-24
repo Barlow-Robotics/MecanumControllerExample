@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -19,6 +20,8 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
+
+  private DigitalInput di = new DigitalInput(1);
 
   String selectedPath = "./pathplanner/generatedJSON/Test_Path_Forwards.wpilib.json";
   Trajectory trajectory = null;
@@ -92,7 +95,11 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+
+    System.out.println("Value of di is " + di.get());
+
+  }
 
   @Override
   public void testInit() {
