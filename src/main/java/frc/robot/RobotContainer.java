@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -11,6 +12,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelSpeeds;
 import edu.wpi.first.math.trajectory.Trajectory;
+//import edu.wpi.first.math.trajectory.Trajectory.State;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.TrajectoryUtil;
@@ -26,8 +28,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
+import java.util.List;
+
 import com.pathplanner.lib.*;
-import com.pathplanner.lib.commands.PPMecanumControllerCommand;
+//import com.pathplanner.lib.commands.PPMecanumControllerCommand;
+import frc.robot.PPMecanumControllerCommand;
+import com.pathplanner.lib.PathPlannerTrajectory.* ;
 
 // import java.io.IOException;
 // import java.nio.file.Path;
@@ -47,12 +53,13 @@ public class RobotContainer {
     Joystick m_driverController = new Joystick(1); // change
 
     // Creates our Motion Profile Controller and Trajectories class
-    Trajectories trajectories = new Trajectories();
-    public static Trajectory[] selectedTrajectory = new Trajectory[2];
+//    Trajectories trajectories = new Trajectories();
 
-    // The driver's controller
-    // XboxController m_driverController = new
-    // XboxController(OIConstants.kDriverControllerPort);
+    PathPlannerTrajectory trajectory ;
+    List<PathPlannerTrajectory> trajectories ;
+
+
+
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -61,8 +68,35 @@ public class RobotContainer {
         // Configure the button bindings
         configureButtonBindings();
 
+
+        //trajectories = new List<PathPlannerTrajectory>() ;
+        // trajectories.add(PathPlanner.loadPath("0_TarmacB1_to_BBallD", Constants.DriveConstants.pPMaxVel, Constants.DriveConstants.pPMaxAcc));
+        // trajectories.add(PathPlanner.loadPath("1_TarmacB1_to_BBallD_BBallC", Constants.DriveConstants.pPMaxVel, Constants.DriveConstants.pPMaxAcc));
+        // trajectories.add(PathPlanner.loadPath("2_TarmacB2_to_BBallB", Constants.DriveConstants.pPMaxVel, Constants.DriveConstants.pPMaxAcc));
+        // trajectories.add(PathPlanner.loadPath("3_TarmacB2_to_BBallB_BBallC", Constants.DriveConstants.pPMaxVel, Constants.DriveConstants.pPMaxAcc));
+        // trajectories.add(PathPlanner.loadPath("4_TarmacB2_to_BBallC", Constants.DriveConstants.pPMaxVel, Constants.DriveConstants.pPMaxAcc));
+        // trajectories.add(PathPlanner.loadPath("5_TarmacB2_to_BBallC_BBallB", Constants.DriveConstants.pPMaxVel, Constants.DriveConstants.pPMaxAcc));
+        // trajectories.add(PathPlanner.loadPath("6_TarmacB2_to_BBallC_BBallD", Constants.DriveConstants.pPMaxVel, Constants.DriveConstants.pPMaxAcc));
+        // trajectories.add(PathPlanner.loadPath("7_TarmacR1_to_RBallD", Constants.DriveConstants.pPMaxVel, Constants.DriveConstants.pPMaxAcc));
+        // trajectories.add(PathPlanner.loadPath("8_TarmacR1_to_RBallD_RBallE", Constants.DriveConstants.pPMaxVel, Constants.DriveConstants.pPMaxAcc));
+        // trajectories.add(PathPlanner.loadPath("9_TarmacR1_to_RBallE", Constants.DriveConstants.pPMaxVel, Constants.DriveConstants.pPMaxAcc));
+        // trajectories.add(PathPlanner.loadPath("10_TarmacR1_to_RBallE_RBallF", Constants.DriveConstants.pPMaxVel, Constants.DriveConstants.pPMaxAcc));
+        // trajectories.add(PathPlanner.loadPath("11_TarmacR2_to_RBallF", Constants.DriveConstants.pPMaxVel, Constants.DriveConstants.pPMaxAcc));
+        // trajectories.add(PathPlanner.loadPath("12_TarmacR2_to_RBallF_RBallE", Constants.DriveConstants.pPMaxVel, Constants.DriveConstants.pPMaxAcc));
+        // trajectories.add(PathPlanner.loadPath("13_Test_Constant_x", Constants.DriveConstants.pPMaxVel, Constants.DriveConstants.pPMaxAcc));
+        // trajectories.add(PathPlanner.loadPath("14_Test_Constant_y", Constants.DriveConstants.pPMaxVel, Constants.DriveConstants.pPMaxAcc));
+        // trajectories.add(PathPlanner.loadPath("15_Test_Diagonal", Constants.DriveConstants.pPMaxVel, Constants.DriveConstants.pPMaxAcc));
+        // trajectories.add(PathPlanner.loadPath("16_Test_Loop", Constants.DriveConstants.pPMaxVel, Constants.DriveConstants.pPMaxAcc));
+        // trajectories.add(PathPlanner.loadPath("17_Test_Sideways", Constants.DriveConstants.pPMaxVel, Constants.DriveConstants.pPMaxAcc));
+        // trajectories.add(PathPlanner.loadPath("18_Test_U_Shape_Dif_Angle", Constants.DriveConstants.pPMaxVel, Constants.DriveConstants.pPMaxAcc));
+        // trajectories.add(PathPlanner.loadPath("19_Test_U_Shape_Same_Angle", Constants.DriveConstants.pPMaxVel, Constants.DriveConstants.pPMaxAcc));
+
+        trajectory = PathPlanner.loadPath("2_TarmacB2_to_BBallB", 1.0, 0.5);
+
+
         // Configure default commands
         // Set the default drive command to split-stick arcade drive
+<<<<<<< Updated upstream
         // m_robotDrive.setDefaultCommand(
         //         // A split-stick arcade command, with forward/backward controlled by the left
         //         // hand, and turning controlled by the right.
@@ -84,6 +118,27 @@ public class RobotContainer {
                                 -m_driverController.getRawAxis(0) * 0.5, false);
                     }, m_robotDrive));
     }
+=======
+        m_robotDrive.setDefaultCommand(
+                // A split-stick arcade command, with forward/backward controlled by the left
+                // hand, and turning controlled by the right.
+                new RunCommand(() -> {
+                    m_robotDrive.drive(
+                            m_driverController.getRawAxis(4),
+                            m_driverController.getRawAxis(5),
+                            -m_driverController.getRawAxis(0) * 0.5, 
+                            false);
+            }, m_robotDrive));
+
+            // new RunCommand(() -> {
+            //     double input = MathUtil.applyDeadband(m_driverController.getRawAxis(5), 0.05) ;
+            //     double speed = -input * 5 ;
+            //     m_robotDrive.setWheelSpeeds( new MecanumDriveWheelSpeeds(speed, speed, speed, speed));
+            // }, m_robotDrive)
+            // );
+
+        }
+>>>>>>> Stashed changes
 
     /**
      * Use this method to define your button->command mappings. Buttons can be
@@ -113,9 +168,13 @@ public class RobotContainer {
      */
     public Command getAutonomousCommand() {
 
+<<<<<<< Updated upstream
         PathPlannerTrajectory trajectory = PathPlanner.loadPath("Test Path North South", 1, 0.5);
 
         m_robotDrive.resetOdometry(trajectory.getInitialPose());  
+=======
+        // PathPlannerTrajectory trajectory = trajectories.get(0) ;
+>>>>>>> Stashed changes
 
         PPMecanumControllerCommand ppCommand = new PPMecanumControllerCommand(
                 trajectory,
@@ -152,7 +211,15 @@ public class RobotContainer {
 
         // Reset odometry to the starting pose of the trajectory.
         Pose2d temp = trajectory.getInitialPose();
-        m_robotDrive.resetOdometry(trajectory.getInitialPose());
+        PathPlannerState s = (PathPlannerState) trajectory.getStates().get(0) ;
+
+
+//        Pose2d temp2 = new Pose2d( temp.getTranslation(), new Rotation2d()) ;
+
+//        Pose2d temp2 = new Pose2d( temp.getTranslation(), new Rotation2d(Math.PI/2.0)) ;
+        Pose2d temp2 = new Pose2d( temp.getTranslation(), s.holonomicRotation) ;
+//        m_robotDrive.resetOdometry(trajectory.getInitialPose());
+        m_robotDrive.resetOdometry(temp2);
 
         // Run path following command, then stop at the end.
         return ppCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false));
