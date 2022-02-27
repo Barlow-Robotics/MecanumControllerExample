@@ -38,15 +38,6 @@ public final class Constants {
     public static final double circumferenceOfWheel = 6.0 * Math.PI;
 
     // wpk need to measure and update.
-<<<<<<< Updated upstream
-    public static final int Counts_Per_Revolution = 8192 ;
-    public static final double Wheel_Diameter = 6.0 ;
-    public static final double Inches_Per_Revolution = Math.PI * Wheel_Diameter ;
-    public static final double Meters_Per_Revolution = Inches_Per_Revolution * InchesToMeters ;
-    public static final double Meters_Per_Count = Meters_Per_Revolution / Counts_Per_Revolution ;
-    public static final double Counts_Per_Meter = 1.0 / Meters_Per_Count ; 
- 
-=======
     public static final int Counts_Per_Revolution = 21300;
     public static final double Wheel_Diameter = 6.0;
     public static final double Inches_Per_Revolution = Math.PI * Wheel_Diameter;
@@ -56,7 +47,6 @@ public final class Constants {
     // PathPlanner velocity and acceleration constants 
     public static final double pPMaxVel = 2.0;
     public static final double pPMaxAcc = 0.5;
->>>>>>> Stashed changes
 
     // wpk need to measure and update.
     // Distance between centers of right and left wheels on robot
@@ -71,7 +61,7 @@ public final class Constants {
         new Translation2d(kWheelBase / 2, -kTrackWidth / 2),
         new Translation2d(-kWheelBase / 2, kTrackWidth / 2),
         new Translation2d(-kWheelBase / 2, -kTrackWidth / 2)
-        );
+    );
 
     // public static final int kEncoderCPR = 1024;
     // public static final double kWheelDiameterMeters = 0.15;
@@ -104,13 +94,6 @@ public final class Constants {
 
     public static final int PID_id = 0;
     public static final double PID_Period = 1.0 / 20.0;
-<<<<<<< Updated upstream
-    public static final double DrivetrainKf = 0.189; // 0.1797
-    public static final double DrivetrainkP = DrivetrainKf / 10.0 ;
-    public static final double DrivetrainkD = DrivetrainkP / 8.0 ;
-    public static final double DrivetrainkI = 0.0 ;
-
-=======
     public static final double Drivetrainkf = 0.2; // 0.1797
     public static final double DrivetrainkP = 0.02;
     public static final double DrivetrainkI = 0.0; // 0.1797
@@ -121,7 +104,6 @@ public final class Constants {
     public static final double WheelCircumference = Math.PI * WheelDiamater; // meters
     public static final double WheelCountsPerMeter = (1.0 / WheelCircumference) * UnitsPerRotation;
     public static final double MotorVelocityOneMeterPerSecond = WheelCountsPerMeter / 10.0;
->>>>>>> Stashed changes
 
     public static final double RPMsToUnitsPerHundredMilliseconds = 1.0 / 600.0;
     public static final double DesiredRPMsForDrive = 560.0;

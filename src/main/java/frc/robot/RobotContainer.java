@@ -33,7 +33,7 @@ import java.util.List;
 import com.pathplanner.lib.*;
 //import com.pathplanner.lib.commands.PPMecanumControllerCommand;
 import frc.robot.PPMecanumControllerCommand;
-import com.pathplanner.lib.PathPlannerTrajectory.* ;
+import com.pathplanner.lib.PathPlannerTrajectory.*;
 
 // import java.io.IOException;
 // import java.nio.file.Path;
@@ -53,7 +53,7 @@ public class RobotContainer {
     Joystick m_driverController = new Joystick(1); // change
 
     // Creates our Motion Profile Controller and Trajectories class
-//    Trajectories trajectories = new Trajectories();
+    // Trajectories trajectories = new Trajectories();
 
     PathPlannerTrajectory trajectory ;
     List<PathPlannerTrajectory> trajectories ;
@@ -96,39 +96,16 @@ public class RobotContainer {
 
         // Configure default commands
         // Set the default drive command to split-stick arcade drive
-<<<<<<< Updated upstream
-        // m_robotDrive.setDefaultCommand(
-        //         // A split-stick arcade command, with forward/backward controlled by the left
-        //         // hand, and turning controlled by the right.
-        //         new RunCommand(() -> {
-        //             m_robotDrive.drive(
-        //                     m_driverController.getRawAxis(5),
-        //                     m_driverController.getRawAxis(4),
-        //                     -m_driverController.getRawAxis(0) * 0.5, false);
-        //         }, m_robotDrive));
-
-
-                m_robotDrive.setDefaultCommand(
-                    // A split-stick arcade command, with forward/backward controlled by the left
-                    // hand, and turning controlled by the right.
-                    new RunCommand(() -> {
-                        m_robotDrive.drive(
-                                -0.0, 
-                                0.0,
-                                -m_driverController.getRawAxis(0) * 0.5, false);
-                    }, m_robotDrive));
-    }
-=======
         m_robotDrive.setDefaultCommand(
                 // A split-stick arcade command, with forward/backward controlled by the left
                 // hand, and turning controlled by the right.
-                new RunCommand(() -> {
+                new RunCommand(() -> {  
                     m_robotDrive.drive(
                             m_driverController.getRawAxis(4),
                             m_driverController.getRawAxis(5),
                             -m_driverController.getRawAxis(0) * 0.5, 
                             false);
-            }, m_robotDrive));
+                }, m_robotDrive));
 
             // new RunCommand(() -> {
             //     double input = MathUtil.applyDeadband(m_driverController.getRawAxis(5), 0.05) ;
@@ -136,9 +113,7 @@ public class RobotContainer {
             //     m_robotDrive.setWheelSpeeds( new MecanumDriveWheelSpeeds(speed, speed, speed, speed));
             // }, m_robotDrive)
             // );
-
-        }
->>>>>>> Stashed changes
+    }
 
     /**
      * Use this method to define your button->command mappings. Buttons can be
@@ -156,9 +131,6 @@ public class RobotContainer {
                 .whenReleased(() -> m_robotDrive.setMaxOutput(1));
     }
 
-
-
-
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.
      * 
@@ -168,13 +140,7 @@ public class RobotContainer {
      */
     public Command getAutonomousCommand() {
 
-<<<<<<< Updated upstream
-        PathPlannerTrajectory trajectory = PathPlanner.loadPath("Test Path North South", 1, 0.5);
-
-        m_robotDrive.resetOdometry(trajectory.getInitialPose());  
-=======
         // PathPlannerTrajectory trajectory = trajectories.get(0) ;
->>>>>>> Stashed changes
 
         PPMecanumControllerCommand ppCommand = new PPMecanumControllerCommand(
                 trajectory,
@@ -214,11 +180,11 @@ public class RobotContainer {
         PathPlannerState s = (PathPlannerState) trajectory.getStates().get(0) ;
 
 
-//        Pose2d temp2 = new Pose2d( temp.getTranslation(), new Rotation2d()) ;
+      //  Pose2d temp2 = new Pose2d( temp.getTranslation(), new Rotation2d()) ;
 
-//        Pose2d temp2 = new Pose2d( temp.getTranslation(), new Rotation2d(Math.PI/2.0)) ;
+      //Pose2d temp2 = new Pose2d( temp.getTranslation(), new Rotation2d(Math.PI/2.0)) ;
         Pose2d temp2 = new Pose2d( temp.getTranslation(), s.holonomicRotation) ;
-//        m_robotDrive.resetOdometry(trajectory.getInitialPose());
+      //m_robotDrive.resetOdometry(trajectory.getInitialPose());
         m_robotDrive.resetOdometry(temp2);
 
         // Run path following command, then stop at the end.

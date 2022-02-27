@@ -193,16 +193,6 @@ public class DriveSubsystem extends SubsystemBase {
 
 
     public void setWheelSpeeds(MecanumDriveWheelSpeeds speeds) {
-<<<<<<< Updated upstream
-        m_frontLeft.set(TalonSRXControlMode.Velocity, speeds.frontLeftMetersPerSecond * DriveConstants.Counts_Per_Meter);
-        m_frontRight.set(TalonSRXControlMode.Velocity, speeds.frontRightMetersPerSecond * DriveConstants.Counts_Per_Meter);
-        m_backLeft.set(TalonSRXControlMode.Velocity, speeds.rearLeftMetersPerSecond * DriveConstants.Counts_Per_Meter);
-        m_backRight.set(TalonSRXControlMode.Velocity, speeds.rearRightMetersPerSecond * DriveConstants.Counts_Per_Meter);
-        NetworkTableInstance.getDefault().getEntry("drive/speeds/frontLeftMetersPerSecond").setDouble(speeds.frontLeftMetersPerSecond);
-        NetworkTableInstance.getDefault().getEntry("drive/speeds/frontRightMetersPerSecond").setDouble(speeds.frontRightMetersPerSecond);
-        NetworkTableInstance.getDefault().getEntry("drive/speeds/rearLeftMetersPerSecond").setDouble(speeds.rearLeftMetersPerSecond);
-        NetworkTableInstance.getDefault().getEntry("drive/speeds/rearRightMetersPerSecond").setDouble(speeds.rearRightMetersPerSecond);
-=======
         m_frontLeft.set(TalonSRXControlMode.Velocity, speeds.frontLeftMetersPerSecond * Constants.DriveConstants.MotorVelocityOneMeterPerSecond);
         m_frontRight.set(TalonSRXControlMode.Velocity, speeds.frontRightMetersPerSecond * Constants.DriveConstants.MotorVelocityOneMeterPerSecond);
         m_backLeft.set(TalonSRXControlMode.Velocity, speeds.rearLeftMetersPerSecond * Constants.DriveConstants.MotorVelocityOneMeterPerSecond);
@@ -215,7 +205,6 @@ public class DriveSubsystem extends SubsystemBase {
         NetworkTableInstance.getDefault().getEntry("drive/commanded_speed/frontRight").setDouble(speeds.frontRightMetersPerSecond);
         NetworkTableInstance.getDefault().getEntry("drive/commanded_speed/backLeft").setDouble(speeds.rearLeftMetersPerSecond);
         NetworkTableInstance.getDefault().getEntry("drive/commanded_speed/backRight").setDouble(speeds.rearRightMetersPerSecond);
->>>>>>> Stashed changes
     }
 
 

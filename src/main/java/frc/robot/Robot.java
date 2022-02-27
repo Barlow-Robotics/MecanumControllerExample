@@ -111,14 +111,9 @@ public class Robot extends TimedRobot {
   @Override
   public void testPeriodic() {}
 
-
-
   /** This function is called periodically during test mode. */
   @Override
   public void simulationPeriodic() {
     frc.robot.sim.PhysicsSim.getInstance().run();
   }
-
-
-
 }
